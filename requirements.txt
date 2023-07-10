@@ -1,0 +1,5 @@
+torch
+librosa
+discord.py-self
+num2words
+omegaconf
