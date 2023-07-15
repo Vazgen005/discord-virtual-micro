@@ -10,6 +10,7 @@ import torch
 import soundcard as sc
 from speach import Speach
 from client import MyClient
+from utils.text import Text
 
 
 def main():
@@ -39,6 +40,7 @@ def main():
 
     torch._C._jit_set_profiling_mode(False)  # type: ignore
 
+    text = Text()
     speach = Speach(
         model=model,
         virtual=sc.get_speaker(config["virtual"]),
@@ -47,9 +49,10 @@ def main():
         play_on_pysical=config["play_on_pysical"],
         speaker=config["speaker"],
         delay_after=config["delay_after"],
-        on_fail=config["on_fail"],)
+        on_fail=config["on_fail"],
+        text=text)
     speach.add_to_queue(config["on_ready"])
-    client = MyClient(speach)
+    client = MyClient(speach, text)
     client.run(config["dc_token"])
 
 

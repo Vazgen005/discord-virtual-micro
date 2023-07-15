@@ -1,5 +1,5 @@
 {
-    "dc_token": "",
+    "dc_token": "YOUR_TOKEN",
     "language": "ru",
     "model_id": "ru_v3",
     "sample_rate": 24000,

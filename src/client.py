@@ -10,6 +10,7 @@ Classes:
 from threading import Thread
 import discord
 from speach import Speach
+from utils.text import Text
 
 
 class MyClient(discord.Client):
@@ -27,9 +28,10 @@ class MyClient(discord.Client):
 
     """
 
-    def __init__(self, speach: Speach):
+    def __init__(self, speach: Speach, text: Text):
         super().__init__()
         self.speach = speach
+        self.text = text
 
     async def on_ready(self):
         """
@@ -59,8 +61,8 @@ class MyClient(discord.Client):
         """
         if message.author != self.user:
             return
-        if not message.content:
+        if message.content.startswith('vo!set_word'):
+            args = message.content.lower().split()
+            Thread(target=self.text.set_word, args=(args[1], args[2])).start()
             return
-        print(message.content)
-        Thread(target=self.speach.add_to_queue,
-               args=(message.content,)).start()
+        Thread(target=self.speach.add_to_queue, args=(message.content,)).start()

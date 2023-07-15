@@ -32,7 +32,7 @@ addtoqueue: Adds text to the queue for TTS conversion.
 from threading import Thread
 from io import BytesIO
 import librosa
-from text import Text
+from utils.text import Text
 
 
 class Speach:
@@ -57,7 +57,8 @@ class Speach:
                  play_on_pysical: bool,
                  speaker: str,
                  delay_after: int,
-                 on_fail: str) -> None:
+                 on_fail: str,
+                 text: Text) -> None:
         self.model = model
         self.virtual = virtual
         self.physical = physical
@@ -66,6 +67,7 @@ class Speach:
         self.speaker = speaker
         self.delay_after = delay_after
         self.on_fail = on_fail
+        self.text = text
 
         self.is_running = False
         self._queue: list = []
@@ -118,7 +120,9 @@ class Speach:
         Returns:
             None
         """
-        text = Text.text2norm(text)
+        if not text:
+            return
+        text = self.text.text2norm(text)
         try:
             tts = self.__tts(text)
         except Exception:
