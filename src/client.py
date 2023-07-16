@@ -44,6 +44,10 @@ class MyClient(discord.Client):
         Returns:
             None
         """
+        await self.change_presence(
+            status=discord.Status.offline,
+            afk=True,
+            edit_settings=False)
         print('Logged on as', self.user)
         if not self.speach.is_running:
             Thread(target=self.speach.play_queue, daemon=True).start()
