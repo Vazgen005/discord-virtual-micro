@@ -64,4 +64,4 @@ class Text:
     def __replace_links(self, string):
         if self._link_replacement:
             return re.sub(self._link_pattern, self._link_replacement, string)
-        return ''
+        return re.sub(self._link_pattern, '', string)
