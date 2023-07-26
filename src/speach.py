@@ -126,5 +126,14 @@ class Speach:
         try:
             tts = self.__tts(text)
         except Exception:
+            if not self.on_fail:
+                return
             tts = self.__tts(self.on_fail)
         self._queue.append(tts)
+    
+    def run_queue(self) -> None:
+        def to_run():
+            if not self.is_running:
+                Thread(target=self.play_queue, daemon=True).start()
+                self.is_running = True
+        Thread(target=to_run).start()

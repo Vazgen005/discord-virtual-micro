@@ -25,7 +25,7 @@ def main():
     None
     """
     try:
-        with open('config.json', 'r', encoding='utf-8') as file:
+        with open("config.json", "r", encoding="utf-8") as file:
             config = json.load(file)
     except OSError as ex:
         print(f"Could not load config.json\n{ex}")
@@ -40,7 +40,7 @@ def main():
 
     torch._C._jit_set_profiling_mode(False)  # type: ignore
 
-    text = Text()
+    text = Text(config["link_replacement"])
     speach = Speach(
         model=model,
         virtual=sc.get_speaker(config["virtual"]),
@@ -50,13 +50,15 @@ def main():
         speaker=config["speaker"],
         delay_after=config["delay_after"],
         on_fail=config["on_fail"],
-        text=text)
+        text=text,
+    )
     speach.add_to_queue(config["on_ready"])
-    client = MyClient(speach, text)
-    client.run(config["dc_token"])
+    MyClient(speach=speach, text=text).run(
+        config["dc_token"],
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:

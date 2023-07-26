@@ -7,66 +7,41 @@ Classes:
     MyClient
 
 """
-from threading import Thread
-import discord
+from discord.ext import commands
+from discord.ext.commands import Command
 from speach import Speach
 from utils.text import Text
+from pathlib import Path
+from pydoc import importfile
+import logging
 
 
-class MyClient(discord.Client):
-    """
-    A subclass of discord.Client that represents a Discord bot client.
-
-    Attributes:
-        speach (Speach): An instance of the Speach class.
-
-    Methods:
-        __init__: Initializes an instance of the MyClient class.
-        on_ready: Asynchronous function called
-        when the bot is ready to start receiving and processing events.
-        on_message: Handles incoming messages.
-
-    """
-
-    def __init__(self, speach: Speach, text: Text):
-        super().__init__()
+class MyClient(commands.Bot):
+    def __init__(self, speach: Speach, text: Text) -> None:
+        # self.logger = logging.getLogger(__name__)
+        # logging.basicConfig()
+        # self.logger.setLevel(logging.INFO)
+        super().__init__(command_prefix="vo!", self_bot=True)
         self.speach = speach
         self.text = text
+        self._commands_path = Path(__file__).parent / "commands"
+        self._events_path = Path(__file__).parent / "events"
+        self.__load_commands()
+        self.__load_events()
 
-    async def on_ready(self):
-        """
-        Asynchronous function that is called when
-        the bot is ready to start receiving and processing events.
+    def __load_commands(self) -> None:
+        for file in self._commands_path.glob("*.py"):
+            module = importfile(file.__str__())
+            command = Command(getattr(module, module.__name__))
+            self.add_command(command)
+            # self.logger.info(f"Loaded {module.__name__} command")
+            print("[+]", f"Loaded {module.__name__} command")
 
-        Parameters:
-            self (class): The instance of the class that the function belongs to.
-
-        Returns:
-            None
-        """
-        await self.change_presence(
-            status=discord.Status.offline,
-            afk=True,
-            edit_settings=False)
-        print('Logged on as', self.user)
-        if not self.speach.is_running:
-            Thread(target=self.speach.play_queue, daemon=True).start()
-            self.speach.is_running = True
-
-    async def on_message(self, message):
-        """
-        Handle incoming messages.
-
-        Args:
-            message: The message object representing the incoming message.
-
-        Returns:
-            None
-        """
-        if message.author != self.user:
-            return
-        if message.content.startswith('vo!set_word'):
-            args = message.content.lower().split()
-            Thread(target=self.text.set_word, args=(args[1], args[2])).start()
-            return
-        Thread(target=self.speach.add_to_queue, args=(message.content,)).start()
+    def __load_events(self) -> None:
+        for file in self._events_path.glob("*.py"):
+            module = importfile(file.__str__())
+            module.client = self  # type: ignore
+            func = getattr(module, module.__name__)
+            self.event(func)
+            # self.logger.info(f"Loaded {module.__name__} event")
+            print("[+]", f"Loaded {module.__name__} event")
