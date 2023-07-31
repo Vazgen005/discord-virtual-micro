@@ -32,11 +32,13 @@ def main():
         sys.exit(1)
 
     model, _ = torch.hub.load(
-        repo_or_dir='snakers4/silero-models',
-        model='silero_tts',
+        repo_or_dir="snakers4/silero-models",
+        model="silero_tts",
         language=config["language"],
         speaker=config["model_id"],
-        trust_repo=True)
+        trust_repo=True,
+        device=torch.device("cuda:0" if torch.cuda.is_available() else 'cpu'),
+    )
 
     torch._C._jit_set_profiling_mode(False)  # type: ignore
 

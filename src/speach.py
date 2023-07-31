@@ -33,6 +33,7 @@ from threading import Thread
 from io import BytesIO
 import librosa
 from utils.text import Text
+from time import sleep
 
 
 class Speach:
@@ -109,6 +110,7 @@ class Speach:
             if self._queue:
                 tts = self._queue.pop(0)
                 self.__play(tts)
+            sleep(.1)
 
     def add_to_queue(self, text: str) -> None:
         """

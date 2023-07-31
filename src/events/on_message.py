@@ -13,5 +13,5 @@ async def on_message(message: Message):
         return
 
     Thread(target=client.speach.add_to_queue, args=(message.content,)).start()
-
+    
     await client.process_commands(message)
