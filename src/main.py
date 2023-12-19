@@ -4,6 +4,7 @@ This module contains the main function for running a speech synthesis client.
 It reads a configuration file, loads a pre-trained model,
 and initializes a speech synthesis system. It then creates a client and runs it.
 """
+import asyncio
 import sys
 import json
 import torch
@@ -11,9 +12,10 @@ import soundcard as sc
 from speach import Speach
 from client import MyClient
 from utils.text import Text
+import logging
 
 
-def main():
+async def main():
     """
     The main function reads a configuration file, loads a pre-trained model,
     and initializes a speech synthesis system. It then creates a client and runs it.
@@ -37,12 +39,12 @@ def main():
         language=config["language"],
         speaker=config["model_id"],
         trust_repo=True,
-        device=torch.device("cuda:0" if torch.cuda.is_available() else 'cpu'),
+        device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu"),
     )
 
     torch._C._jit_set_profiling_mode(False)  # type: ignore
-
-    text = Text(config["link_replacement"])
+    loop = asyncio.get_event_loop()
+    text = Text(config["link_replacement"], config["transliterate_to"])
     speach = Speach(
         model=model,
         virtual=sc.get_speaker(config["virtual"]),
@@ -53,15 +55,17 @@ def main():
         delay_after=config["delay_after"],
         on_fail=config["on_fail"],
         text=text,
+        loop=loop,
     )
     speach.add_to_queue(config["on_ready"])
-    MyClient(speach=speach, text=text).run(
-        config["dc_token"],
-    )
+
+    logging.basicConfig(level=logging.INFO)
+
+    await MyClient(speach=speach, text=text).start(token=config["dc_token"])
 
 
 if __name__ == "__main__":
     try:
-        main()
-    except KeyboardInterrupt:
+        asyncio.run(main())
+    except (KeyboardInterrupt, asyncio.exceptions.CancelledError):
         pass

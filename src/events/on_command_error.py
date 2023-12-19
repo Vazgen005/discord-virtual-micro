@@ -7,4 +7,4 @@ client: MyClient | None = None
 
 
 async def on_command_error(ctx: Ctx, error: Exception):
-    await ctx.message.edit(content=str(error))
+	await ctx.message.edit(content=str(error))

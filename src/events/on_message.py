@@ -1,4 +1,4 @@
-from threading import Thread
+import asyncio
 from client import MyClient
 from discord import Message
 
@@ -6,12 +6,11 @@ client: MyClient | None = None
 
 
 async def on_message(message: Message):
-    if not client or not (message.author == client.user):
-        return
-    if message.content.startswith(client.command_prefix.__str__()):
-        await client.process_commands(message)
-        return
+	if not client or message.author != client.user:
+		return
+	if not message.content.startswith(client.command_prefix.__str__()):
+		asyncio.create_task(
+			asyncio.to_thread(client.speach.add_to_queue, message.content)
+		)
 
-    Thread(target=client.speach.add_to_queue, args=(message.content,)).start()
-    
-    await client.process_commands(message)
+	await client.process_commands(message)
