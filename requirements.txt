@@ -1,8 +1,0 @@
-torch==2.0.1
-torchsde
-soundcard
-librosa==0.10.0.*
-discord.py-self
-num2words
-omegaconf
-transliterate

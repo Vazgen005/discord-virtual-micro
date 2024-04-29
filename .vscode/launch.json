@@ -3,11 +3,11 @@
 	"configurations": [
 		{
 			"name": "Debug",
-			"type": "python",
+			"type": "debugpy",
 			"request": "launch",
-			"program": "${workspaceFolder}/src/main.py",
-			"console": "integratedTerminal",
-			"justMyCode": true
+			"module": "src.discord-virtual-micro",
+			"cwd": "${workspaceFolder}",
+			"justMyCode": false
 		}
 	]
 }

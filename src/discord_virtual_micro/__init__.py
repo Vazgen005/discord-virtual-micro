@@ -4,20 +4,28 @@ This module contains the main function for running a speech synthesis client.
 It reads a configuration file, loads a pre-trained model,
 and initializes a speech synthesis system. It then creates a client and runs it.
 """
+
 import asyncio
-import sys
 import json
-import torch
-import soundcard as sc
-from speach import Speach
-from client import MyClient
-from utils.text import Text
 import logging
+import os
+import shutil
+import sys
+from pathlib import Path
+
+import soundcard as sc
+import torch
+from aiorun import run
+
+from .client import MyClient
+from .speach import Speach
+from .utils.patcher import patch_all
+from .utils.text import Text
 
 
-async def main():
+async def start() -> int:
     """
-    The main function reads a configuration file, loads a pre-trained model,
+    The start function reads a configuration file, loads a pre-trained model,
     and initializes a speech synthesis system. It then creates a client and runs it.
 
     Parameters:
@@ -26,12 +34,16 @@ async def main():
     Returns:
     None
     """
-    try:
+    patch_all()
+    loop = asyncio.get_event_loop()
+    if os.path.exists("config.json"):
         with open("config.json", "r", encoding="utf-8") as file:
             config = json.load(file)
-    except OSError as ex:
-        print(f"Could not load config.json\n{ex}")
-        sys.exit(1)
+    else:
+        shutil.copyfile(Path(__file__).parent / "config-example.json", "config.json")
+        print("Please fill in the necessary details in the config.json file.")
+        loop.stop()
+        return 1
 
     model, _ = torch.hub.load(
         repo_or_dir="snakers4/silero-models",
@@ -41,9 +53,6 @@ async def main():
         trust_repo=True,
         device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu"),
     )
-
-    torch._C._jit_set_profiling_mode(False)  # type: ignore
-    loop = asyncio.get_event_loop()
     text = Text(config["link_replacement"], config["transliterate_to"])
     speach = Speach(
         model=model,
@@ -62,10 +71,9 @@ async def main():
     logging.basicConfig(level=logging.INFO)
 
     await MyClient(speach=speach, text=text).start(token=config["dc_token"])
+    loop.close()
+    return 0
 
 
-if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except (KeyboardInterrupt, asyncio.exceptions.CancelledError):
-        pass
+def main():
+    sys.exit(run(start(), stop_on_unhandled_errors=True))

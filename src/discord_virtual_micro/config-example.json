@@ -5,7 +5,7 @@
     "sample_rate": 24000,
     "speaker": "aidar",
     "play_on_pysical": true,
-    "virtual": "Virtual Audio Cable",
+    "virtual": "VB-Audio Virtual Cable",
     "physical": "High Definition Audio",
     "delay_after": "150",
     "on_ready": "Микроф+он гот+ов",
