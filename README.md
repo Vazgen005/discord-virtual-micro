@@ -11,9 +11,9 @@ Discord Virtual Microphone is a bot that leverages AI from [Silero Models](https
 - **Custom word pronunciation.** _(Using vo!set-word [word to replace] [replacement word] and vo!del-word [word to delete] to replace/delete a word in the dictionary)_
 - **Auto link replacement.** _(Specify `link_replacement` in the `config.json`)_
 
-## Prerequisites
+## Requirements
 
-Before installation, ensure you have the following prerequisites installed:
+Before installation, ensure you have the following requirements installed:
 
 1. [Python](https://www.python.org/downloads) 3.10 or newer
 2. [pip](https://pypi.org/project/pip) (Usually comes with Python. If missing, install it [manually](https://pip.pypa.io/en/stable/installation))
