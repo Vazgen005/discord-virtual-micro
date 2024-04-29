@@ -27,7 +27,7 @@ To install the bot, run the following commands in your terminal (cmd, powershell
 1. **Install using pip:**
 
    ```shell
-   pip install discord-virtual-micro
+   pip install git+https://github.com/Vazgen005/discord-virtual-micro
    ```
 
 2. **Create a configuration file:**
