@@ -54,11 +54,8 @@ class MyClient(commands.Bot):
             module: ModuleType = import_file(str(file), module_name)
             if default_class := get_default_class(module):
                 event_obj: Event = cast("Event", default_class(self))
-                if event_obj.handler.__func__:
-                    setattr(
-                        getattr(event_obj.handler, "__func__"),
-                        "__name__",
-                        event_obj.name,
-                    )
-                    self.event(event_obj.handler)
-                    self.logger.info(f"Loaded {event_obj.name} event")
+                setattr(
+                    getattr(event_obj.handler, "__func__"), "__name__", event_obj.name
+                )
+                self.event(event_obj.handler)
+                self.logger.info(f"Loaded {event_obj.name} event")
