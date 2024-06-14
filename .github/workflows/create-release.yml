@@ -12,12 +12,12 @@ jobs:
 
             - name: Install the latest version of rye
               uses: eifinger/setup-rye@v3
-
-            - name: Sync rye
-              run: rye sync
+            
+            - name: Install rename
+              run: sudo apt install -y rename
 
             - name: Build
-              run: rye build
+              run: rye build && rename 's/^(.+?)-.+\.(whl|tar\.gz)$/$1.$2/' ./dist/*.*
 
             - name: Release
               uses: softprops/action-gh-release@v1
