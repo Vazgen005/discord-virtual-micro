@@ -17,7 +17,7 @@ jobs:
               run: sudo apt install -y rename
 
             - name: Build
-              run: rye build && rename 's/^(.+?)-.+\.(whl|tar\.gz)$/$1.$2/' ./dist/*.*
+              run: rye build && rename 's/^(.+?)-.+\.(tar\.gz)$/$1.$2/' ./dist/*.*
 
             - name: Release
               uses: softprops/action-gh-release@v2
