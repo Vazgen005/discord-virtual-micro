@@ -33,7 +33,7 @@ decorator==5.1.1
     # via librosa
 discord-protos==0.0.2
     # via discord-py-self
-discord-py-self @ git+https://github.com/dolfies/discord.py-self.git@9c1047bc1f5ae6a739dd246212d049d601bccfc3
+discord-py-self @ https://github.com/dolfies/discord.py-self/archive/9c1047bc1f5ae6a739dd246212d049d601bccfc3.tar.gz
     # via discord-virtual-micro
 docopt==0.6.2
     # via num2words
