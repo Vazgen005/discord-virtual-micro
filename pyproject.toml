@@ -10,6 +10,7 @@ dependencies = [
     "omegaconf>=2.3.0",
     "transliterate>=1.10.2",
     "setuptools>=69.1.1",
+    "numpy==1.24.4",
     "torch>=2.2.1",
     "torchsde>=0.2.6",
     "aiorun>=2023.7.2",
