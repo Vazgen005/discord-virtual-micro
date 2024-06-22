@@ -5,7 +5,7 @@
 			"name": "Debug",
 			"type": "debugpy",
 			"request": "launch",
-			"module": "src.discord-virtual-micro",
+			"module": "discord_virtual_micro",
 			"cwd": "${workspaceFolder}",
 			"justMyCode": false
 		}

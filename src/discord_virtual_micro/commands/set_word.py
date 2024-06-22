@@ -13,6 +13,5 @@ class SetWord(Command):
         super().__init__(client)
 
     async def handler(self, ctx: Ctx, word: str, fixed_word: str) -> None:
-        print(ctx.message.content)
         await to_thread(self.client.text.set_word, word, fixed_word)
         await ctx.message.edit(content=f"### Done!\n`{word}` _->_ `{fixed_word}`")

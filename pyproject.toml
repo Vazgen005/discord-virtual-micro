@@ -1,6 +1,6 @@
 [project]
 name = "discord-virtual-micro"
-version = "0.1.0"
+version = "0.1.1"
 description = "Discord Virtual Microphone is a bot that leverages AI from Silero Models to read out loud any text you type in Discord. This bot can be particularly useful for individuals without access to a physical microphone."
 authors = [{ name = "Vazgen", email = "norvardyanvazgen@gmail.com" }]
 dependencies = [
@@ -10,10 +10,12 @@ dependencies = [
     "omegaconf>=2.3.0",
     "transliterate>=1.10.2",
     "setuptools>=69.1.1",
+    "numpy<2",
     "torch>=2.2.1",
     "torchsde>=0.2.6",
     "aiorun>=2023.7.2",
     "discord.py-self @ https://github.com/dolfies/discord.py-self/archive/9c1047bc1f5ae6a739dd246212d049d601bccfc3.tar.gz",
+    "silero>=0.4.1",
 ]
 
 readme = "README.md"

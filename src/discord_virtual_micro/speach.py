@@ -28,6 +28,7 @@ from io import BytesIO
 import librosa
 from .utils.text import Text
 from asyncio import sleep
+from soundcard.mediafoundation import _Speaker
 
 
 class Speach:
@@ -48,8 +49,8 @@ class Speach:
     def __init__(
         self,
         model,
-        physical,
-        virtual,
+        physical: _Speaker,
+        virtual: _Speaker,
         sample_rate: int,
         play_on_pysical: bool,
         speaker: str,

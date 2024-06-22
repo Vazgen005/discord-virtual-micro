@@ -37,7 +37,6 @@ class MyClient(commands.Bot):
 
     def __load_commands(self) -> None:
         for file in self.__commands_path.glob("*.py"):
-            print(self.__module__)
             module_name: str = f"{self.__package_name}.commands.{file.stem}"
             module: ModuleType = import_file(str(file), module_name)
             if default_class := get_default_class(module):

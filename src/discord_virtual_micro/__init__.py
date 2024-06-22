@@ -9,18 +9,20 @@ import asyncio
 import json
 import logging
 import os
-import shutil
+from shutil import copyfile
 import sys
 from pathlib import Path
 
-import soundcard as sc
+from soundcard.mediafoundation import _Speaker
 import torch
 from aiorun import run
+from silero import silero_tts
 
 from .client import MyClient
 from .speach import Speach
 from .utils.patcher import patch_all
 from .utils.text import Text
+from .utils.config import get_virtual, get_physical
 
 
 async def start() -> int:
@@ -40,24 +42,36 @@ async def start() -> int:
         with open("config.json", "r", encoding="utf-8") as file:
             config = json.load(file)
     else:
-        shutil.copyfile(Path(__file__).parent / "config-example.json", "config.json")
+        copyfile(Path(__file__).parent / "config-example.json", "config.json")
         print("Please fill in the necessary details in the config.json file.")
         loop.stop()
         return 1
 
-    model, _ = torch.hub.load(
-        repo_or_dir="snakers4/silero-models",
-        model="silero_tts",
+    virtual: _Speaker | None = get_virtual(config["virtual"])
+    physical: _Speaker | None = get_physical(config["physical"])
+
+    error_msg = "Your {} is not found. Please check the config.json file."
+    if not virtual:
+        print(error_msg.format("virtual microphone"))
+        loop.stop()
+        return 1
+    if not physical:
+        print(error_msg.format("physical speaker"))
+        loop.stop()
+        return 1
+
+    model, *_ = silero_tts(
         language=config["language"],
         speaker=config["model_id"],
-        trust_repo=True,
-        device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu"),
+        device="cuda:0" if torch.cuda.is_available() else "cpu",
     )
+
     text = Text(config["link_replacement"], config["transliterate_to"])
+
     speach = Speach(
         model=model,
-        virtual=sc.get_speaker(config["virtual"]),
-        physical=sc.get_speaker(config["physical"]),
+        virtual=virtual,
+        physical=physical,
         sample_rate=config["sample_rate"],
         play_on_pysical=config["play_on_pysical"],
         speaker=config["speaker"],
