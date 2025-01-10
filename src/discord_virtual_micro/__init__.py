@@ -12,13 +12,7 @@ import os
 from shutil import copyfile
 import sys
 from pathlib import Path
-
-if sys.platform == "win32":
-    from soundcard.mediafoundation import _Speaker
-elif sys.platform == "linux":
-    from soundcard.pulseaudio import _Speaker
-else:
-    raise NotImplementedError("SoundCard does not support {} yet".format(sys.platform))
+from .utils.config import _Speaker
 
 import torch
 from aiorun import run

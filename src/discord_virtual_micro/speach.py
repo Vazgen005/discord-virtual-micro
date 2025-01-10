@@ -25,17 +25,10 @@ addtoqueue: Adds text to the queue for TTS conversion.
 
 import asyncio
 from io import BytesIO
-import sys
+from .utils.config import _Speaker
 import librosa
 from .utils.text import Text
 from asyncio import sleep
-
-if sys.platform == "win32":
-    from soundcard.mediafoundation import _Speaker
-elif sys.platform == "linux":
-    from soundcard.pulseaudio import _Speaker
-else:
-    raise NotImplementedError("SoundCard does not support {} yet".format(sys.platform))
 
 
 class Speach:
