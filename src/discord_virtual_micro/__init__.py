@@ -12,8 +12,8 @@ import os
 from shutil import copyfile
 import sys
 from pathlib import Path
+from .utils.config import _Speaker
 
-from soundcard.mediafoundation import _Speaker
 import torch
 from aiorun import run
 from silero import silero_tts

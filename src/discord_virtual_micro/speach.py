@@ -25,10 +25,10 @@ addtoqueue: Adds text to the queue for TTS conversion.
 
 import asyncio
 from io import BytesIO
+from .utils.config import _Speaker
 import librosa
 from .utils.text import Text
 from asyncio import sleep
-from soundcard.mediafoundation import _Speaker
 
 
 class Speach:
