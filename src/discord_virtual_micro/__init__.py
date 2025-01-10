@@ -13,7 +13,13 @@ from shutil import copyfile
 import sys
 from pathlib import Path
 
-from soundcard.mediafoundation import _Speaker
+if sys.platform == "win32":
+    from soundcard.mediafoundation import _Speaker
+elif sys.platform == "linux":
+    from soundcard.pulseaudio import _Speaker
+else:
+    raise NotImplementedError("SoundCard does not support {} yet".format(sys.platform))
+
 import torch
 from aiorun import run
 from silero import silero_tts
