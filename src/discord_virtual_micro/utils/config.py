@@ -12,10 +12,12 @@ else:
 def get_virtual(microphone: str | None) -> _Speaker | None:
     if not microphone or microphone == "default":
         microphone = "Virtual Cable"
+    print("Searching for microphone...")
     for i in sc.all_speakers():
-        print(i)
         if microphone in i.name:
+            print("Founded microphone:", i.name)
             return i
+        print("   ", i.name)
     return None
 
 

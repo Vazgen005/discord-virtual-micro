@@ -1,25 +1,26 @@
 [project]
 name = "discord-virtual-micro"
-version = "0.1.1"
+version = "0.1.2"
 description = "Discord Virtual Microphone is a bot that leverages AI from Silero Models to read out loud any text you type in Discord. This bot can be particularly useful for individuals without access to a physical microphone."
 authors = [{ name = "Vazgen", email = "norvardyanvazgen@gmail.com" }]
 dependencies = [
-    "soundcard>=0.4.2",
-    "librosa>=0.10.1",
-    "num2words>=0.5.13",
-    "omegaconf>=2.3.0",
-    "transliterate>=1.10.2",
-    "setuptools>=69.1.1",
-    "numpy<2",
-    "torch>=2.2.1",
-    "torchsde>=0.2.6",
-    "aiorun>=2023.7.2",
-    "discord.py-self @ https://github.com/dolfies/discord.py-self/archive/9c1047bc1f5ae6a739dd246212d049d601bccfc3.tar.gz",
-    "silero>=0.4.1",
+    "soundcard",
+    "librosa",
+    "num2words",
+    "transliterate",
+    "setuptools",
+    "aiorun",
+    "discord.py-self",
+    "silero",
+    "llvmlite==0.43.0",
 ]
 
 readme = "README.md"
-requires-python = ">= 3.10"
+requires-python = "<3.13, >= 3.10"
+
+[project.urls]
+Homepage = "https://github.com/Vazgen005/discord-virtual-micro"
+Issues = "https://github.com/Vazgen005/discord-virtual-micro/issues"
 
 [tool.rye]
 managed = true
@@ -33,8 +34,7 @@ name = "pytorch"
 url = "https://download.pytorch.org/whl/cpu"
 
 [tool.rye.scripts]
-start = { call = "discord_virtual_micro:main" }
-
+start = { cmd = "python -m discord_virtual_micro s" } # idk why soundcard requires additional argument
 
 [build-system]
 requires = ["hatchling"]

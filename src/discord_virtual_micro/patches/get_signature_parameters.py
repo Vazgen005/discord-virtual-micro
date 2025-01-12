@@ -44,7 +44,6 @@ def get_signature_parameters(
             parameter._default = default.default
             parameter._description = default._description
             parameter._displayed_default = default._displayed_default
-            parameter._displayed_name = default._displayed_name
 
         annotation = parameter.annotation
 
